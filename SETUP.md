@@ -10,7 +10,7 @@ The workflow has three required parts:
 
 Cloning this repo does **not** install or connect those pieces automatically. The repo gives you the instructions and examples; your agent/runtime connects them.
 
-## Plain-English mental model
+## Mental model
 
 ```text
 Scheduled discovery runs every day
@@ -172,22 +172,6 @@ Start here:
 | Daily at 8 AM | Normal default for most users. |
 | Twice weekly | Passive monitoring. |
 
-Recommended default:
-
-```cron
-0 8 * * *
-```
-
-That means: run every day at 8:00 AM.
-
-For active searches:
-
-```cron
-0 */6 * * *
-```
-
-That means: run every 6 hours.
-
 ### What the scheduled job must do
 
 ```text
@@ -202,63 +186,6 @@ scheduled discovery job
 ```
 
 Do **not** auto-apply by default.
-
-### Cron example
-
-Create a script named `run-career-discovery.sh` in your private workspace:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-cd "$HOME/Career Intelligence"
-
-# Replace this with your actual agent command.
-# Examples: hermes run, claude, codex, cursor agent, python script, etc.
-your-agent-command "Use the Career Intelligence workflow in scan mode. Scan my configured sources, update my tracker, create or update packets, and report only new high-signal roles or failures."
-```
-
-Make it executable:
-
-```bash
-chmod +x "$HOME/Career Intelligence/run-career-discovery.sh"
-```
-
-Open cron:
-
-```bash
-crontab -e
-```
-
-Add one line:
-
-```cron
-0 8 * * * "$HOME/Career Intelligence/run-career-discovery.sh" >> "$HOME/Career Intelligence/discovery.log" 2>&1
-```
-
-### How to track whether cron is running
-
-Use three simple checks.
-
-#### 1. Check the log
-
-```bash
-tail -50 "$HOME/Career Intelligence/discovery.log"
-```
-
-You should see the latest run summary, new roles, updates, or an error.
-
-#### 2. Check the tracker
-
-Look at these columns:
-
-```text
-Date Found | Last Checked | Next Action | Artifact Status
-```
-
-If `Last Checked` is not changing after the scheduled time, cron is probably not running.
-
-#### 3. Check the packet folders
 
 The scheduled job should create or update folders under:
 
