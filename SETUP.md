@@ -29,9 +29,8 @@ You can stop after Step 2 if you only want the manual workflow.
 ## 1. Clone the repo
 
 ```bash
-git clone https://github.com/karthikvenkatachalapathi/portfolio.git career-intelligence
+git clone https://github.com/karthikvenkatachalapathi/career-intelligence.git
 cd career-intelligence
-git checkout career-intelligence-skill
 ```
 
 ## 2. Add the workflow to your AI agent
