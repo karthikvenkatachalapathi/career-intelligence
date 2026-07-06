@@ -35,6 +35,14 @@ Core rule:
 
 A job posting is not automatically an application task. It may be a research task, a qualification task, a referral task, an interview-prep task, a status task, or a pass.
 
+The workflow can also be paired with scheduled automation:
+
+```text
+cron / scheduled agent -> find relevant job links -> dedupe -> add to review queue -> update live tracker/spreadsheet
+```
+
+That automation should reduce discovery and tracking effort, not blindly apply to jobs.
+
 ---
 
 For the full workflow, see `skills/career-intelligence/SKILL.md`.

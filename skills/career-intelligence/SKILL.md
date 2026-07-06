@@ -107,6 +107,14 @@ storage:
   career_packet_root: <CAREER_PACKET_ROOT>
   tracker: <OPTIONAL_TRACKER_URL_OR_PATH>
 
+automation:
+  scheduled_scan: <OPTIONAL_CRON_OR_SCHEDULED_AGENT>
+  approved_sources:
+    - <JOB_BOARD_OR_COMPANY_CAREERS_SOURCE>
+  tracker_sync: <OPTIONAL_SPREADSHEET_OR_DATABASE_SYNC>
+  default_new_status: "01 - Not Reviewed"
+  alert_policy: <WHEN_TO_NOTIFY_THE_USER>
+
 thresholds:
   evaluate_only_below: 7.0
   tailor_materials_at_or_above: 7.0
@@ -149,6 +157,28 @@ START HERE.md
 ```
 
 Do not create every artifact for every role. Generate only what the mode and threshold require.
+
+## Suggested automation layer
+
+The workflow can be run manually, but it becomes more useful when paired with a scheduled scan.
+
+A cron job, scheduled agent, or workflow runner can:
+
+1. scan approved job sources on a schedule,
+2. extract company, role, URL, location, compensation, and source,
+3. deduplicate against existing packets and tracker rows,
+4. add new candidates to the review queue,
+5. update a spreadsheet, database, or tracker with live status,
+6. notify only when a role needs attention.
+
+Automation should not apply to jobs by default. It should reduce discovery and tracking effort while preserving the decision workflow.
+
+Default scheduled-scan behavior:
+
+- New roles go to `01 - Not Reviewed` or an equivalent review queue.
+- Existing roles are updated, not duplicated.
+- The tracker mirrors packet status, source links, fit signals, and next action.
+- Alerts are reserved for new high-signal roles, blockers, or state changes.
 
 ## Phase 0 — Source collection
 

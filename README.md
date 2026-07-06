@@ -51,6 +51,7 @@ The distinction:
 | Output | CV, cover letter, interview prep | Career packet: fit, evidence, employer context, risks, questions, referral strategy, status, and artifacts |
 | Time horizon | Application moment | Full opportunity lifecycle |
 | Differentiator | Execution speed | Judgment, gates, evidence, continuity |
+| Automation layer | Usually user-initiated application work | Optional scheduled scans that find relevant job links, create review candidates, and update a live tracker/spreadsheet |
 
 ## Core idea
 
@@ -77,7 +78,7 @@ The skill routes work into the narrowest useful mode before generating artifacts
 
 ## What a career packet can include
 
-For serious opportunities, the skill can create or update a structured packet:
+For serious opportunities, the workflow creates or updates a structured career packet.
 
 ```text
 START HERE.md
@@ -98,6 +99,38 @@ START HERE.md
 Use any storage system you prefer: Markdown folders, Notion, Google Docs, a database, a spreadsheet, a project-management tool, or plain files.
 
 The key is not the tool. The key is preserving the reasoning, evidence, and next action.
+
+## Optional automation layer
+
+This workflow also supports scheduled automation.
+
+A lightweight cron job or scheduled agent can run without manual prompting to:
+
+1. search selected sources for relevant job links,
+2. deduplicate roles already seen,
+3. add promising roles to a review queue,
+4. create starter packets when useful,
+5. update a live spreadsheet or tracker with status, links, fit signals, and next actions.
+
+The automation should not blindly apply to jobs. Its job is to reduce discovery and tracking friction:
+
+> find relevant links automatically, preserve them in the workflow, and keep the live tracker current.
+
+The human or agent can then evaluate, apply, prep, or pass using the same Career Intelligence modes.
+
+Typical scheduled setup:
+
+```text
+cron / scheduled agent
+  -> scan approved job sources
+  -> extract company, role, URL, location, compensation, and source
+  -> dedupe against existing packets and tracker rows
+  -> add new candidates to Not Reviewed
+  -> update spreadsheet / tracker live view
+  -> alert only when something needs attention
+```
+
+This makes the tracker an operational dashboard rather than a manually maintained spreadsheet.
 
 ## How to use it with any AI agent
 
