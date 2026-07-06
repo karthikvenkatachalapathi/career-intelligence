@@ -19,7 +19,7 @@ This workflow adds the missing decision layer before application execution:
 - preserve why a role is or is not worth pursuing,
 - create opportunity packets only when useful,
 - prepare for referrals, recruiter screens, and interviews,
-- keep a tracker or scheduled discovery loop aligned with the underlying evidence.
+- keep scheduled discovery and a tracker aligned with the underlying evidence.
 
 The goal is **better career judgment**, not more application volume.
 
@@ -43,7 +43,7 @@ The agent classifies each request before acting:
 
 | Mode | Outcome |
 |---|---|
-| `scan` | Find credible opportunities from approved sources. |
+| `scan` | Find credible opportunities from approved global sources. |
 | `evaluate` | Decide whether a role is worth pursuing and why. |
 | `apply` | Create truthful application materials after the role clears the bar. |
 | `prep` | Prepare for recruiter calls, referrals, screens, and interviews. |
@@ -61,7 +61,7 @@ Depending on the mode, the workflow can produce:
 - an opportunity packet,
 - source-link capture,
 - referral or recruiter-screen prep,
-- ATS/resume/cover-letter artifacts when justified,
+- ATS/resume/CV/cover-letter artifacts when justified,
 - tracker updates,
 - scheduled discovery candidates.
 
@@ -73,13 +73,13 @@ templates/opportunity-packet-template.md
 
 The user should not manually create every packet file. The agent creates only what the mode requires.
 
-## Automation philosophy
+## Scheduled discovery is required
 
-Cloning this repo does **not** install cron jobs, authenticate LinkedIn, create trackers, or apply to jobs.
+The full Career Intelligence workflow includes scheduled discovery. Manual prompts are useful, but they are not the complete system.
 
-Those are optional integrations.
+Cloning this repo does **not** install cron jobs, authenticate LinkedIn, create trackers, or apply to jobs. You still need to connect your scheduler and tracker in your own environment.
 
-When added, automation should support judgment rather than replace it:
+Scheduled discovery should support judgment rather than replace it:
 
 ```text
 scheduled discovery
@@ -87,10 +87,27 @@ scheduled discovery
   -> dedupe against existing packets/tracker rows
   -> create review candidates
   -> update tracker
+  -> record last run time
   -> notify only when attention is needed
 ```
 
 It should not auto-apply by default.
+
+Recommended default frequency: **daily at 8 AM**. For active searches, run **every 6 hours**. See [SETUP.md](SETUP.md) for cron examples, logging, and how to verify that the scheduled job is running.
+
+## When artifacts are created
+
+Simple rule:
+
+```text
+Every job gets tracking.
+Promising jobs get packets.
+Apply-stage jobs get resume/CV + cover letter.
+Interview-stage jobs get interview prep.
+Closed jobs get no new artifacts.
+```
+
+The workflow supports global job markets: use `resume` or `CV` according to local convention, and always track country/region, location, work model, salary currency, and visa/sponsorship notes when visible.
 
 ## Quick start
 

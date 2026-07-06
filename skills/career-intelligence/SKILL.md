@@ -1,7 +1,7 @@
 ---
 name: career-intelligence
 description: Use when evaluating career opportunities, job postings, referrals, recruiter conversations, interviews, offers, rejections, or application artifacts. Classifies the request, assesses evidence-based fit, preserves decision context, and creates truthful career materials only when justified.
-version: 1.2.0
+version: 1.3.0
 license: MIT
 ---
 
@@ -43,8 +43,13 @@ The goal is not to maximize job applications. The goal is to improve decision qu
    - Capture source links, rationale, risks, status, questions, and next action.
 
 5. **Generate artifacts only when justified.**
-   - Resume, cover-letter, referral, or interview artifacts should follow the mode and threshold.
+   - Resume, CV, cover-letter, referral, or interview artifacts should follow the mode and threshold.
    - If a role is weak or unclear, recommend research, qualification, or pass instead of generating polished documents.
+
+6. **Scheduled discovery is part of the system.**
+   - The complete workflow requires a scheduled scan plus a tracker.
+   - Manual one-off evaluation is allowed, but label it as manual mode rather than the full Career Intelligence system.
+   - The scheduled job must update tracker state, packet state, and last-run evidence.
 
 ## Workflow modes
 
@@ -52,7 +57,7 @@ Before doing anything else, classify the request into one mode.
 
 | Mode | Trigger examples | Expected behavior |
 |---|---|---|
-| `scan` | “Find roles,” “scan job boards,” “what should I look at?” | Search high-signal sources, dedupe, and shortlist only credible matches. |
+| `scan` | “Find roles,” “scan job boards,” “what should I look at?” | Search high-signal global sources, dedupe, and shortlist only credible matches. |
 | `evaluate` | Job link, JD, company page, “is this worth it?” | Build or update fit analysis, role intelligence, employer context, risks, and next-step recommendation. Do not tailor materials by default. |
 | `apply` | “Create a packet,” “tailor resume,” “apply,” “move forward” | Create/update the opportunity packet and generate application artifacts from verified evidence, including change log and reviewer pass. |
 | `prep` | Recruiter screen, hiring-manager call, referral call, interview | Build pitch, story bank, questions, qualification wording, red flags, and do-not-overclaim boundaries. |
@@ -77,6 +82,8 @@ Possible inputs:
 - interview stage and interviewer context
 - compensation, location, or work-model constraints
 - existing packet or tracker status
+
+For any-country jobs, normalize market context instead of assuming US defaults. Capture country/region, city, time zone if relevant, salary currency, work model, and visa/sponsorship information when visible.
 
 If no formal job description exists, switch to qualification-first mode. Use verified company context and label all inferred role expectations clearly.
 
@@ -106,16 +113,19 @@ source_materials:
 
 storage:
   career_packet_root: <CAREER_PACKET_ROOT>
-  tracker: <OPTIONAL_TRACKER_URL_OR_PATH>
+  tracker: <TRACKER_URL_OR_PATH>
 
 automation:
-  scheduled_scan: <OPTIONAL_CRON_OR_SCHEDULED_AGENT>
+  scheduled_scan: <CRON_OR_SCHEDULED_AGENT>
+  recommended_frequency: "daily at 8 AM; every 6 hours for active searches"
   approved_sources:
     - <JOB_BOARD_OR_COMPANY_CAREERS_SOURCE>
     - <COMPANY_CAREERS_PAGE>
     - <LINKEDIN_MCP_OR_LINKEDIN_JOB_SEARCH>
-  linkedin_mcp: <OPTIONAL_LINKEDIN_MCP_SERVER_NAME>
-  tracker_sync: <OPTIONAL_SPREADSHEET_OR_DATABASE_SYNC>
+    - <COUNTRY_SPECIFIC_JOB_BOARD>
+    - <REMOTE_WORK_BOARD>
+  linkedin_mcp: <LINKEDIN_MCP_SERVER_NAME_IF_USED>
+  tracker_sync: <SPREADSHEET_OR_DATABASE_SYNC>
   default_new_status: "01 - Not Reviewed"
   alert_policy: <WHEN_TO_NOTIFY_THE_USER>
 
@@ -162,20 +172,60 @@ START HERE.md
 
 Do not create every artifact for every role. Generate only what the mode and threshold require.
 
-## Suggested automation layer
+Artifact creation rules:
 
-The workflow can be run manually, but it becomes more useful when paired with a scheduled scan.
+| Stage / status | Create these artifacts | Do not create yet |
+|---|---|---|
+| `01 - Not Reviewed` | `START HERE.md`, source posting, basic fit notes | Resume, CV, cover letter, interview prep |
+| `02 - Interested` | Fit analysis, employer intelligence, role intelligence, gap analysis, application strategy | Final resume/CV unless applying soon |
+| `03 - Applied` or active apply request | Job-specific resume or CV, cover letter, ATS keyword analysis, tailoring change log | Interview prep unless an interview is scheduled |
+| Referral / recruiter screen | Referrer blurb, recruiter message, 60-second pitch, proof points | Full interview packet unless needed |
+| `04 - Interview` | Interview prep packet, story bank, questions to ask, red flags to qualify | New resume rewrite unless the JD changed |
+| `05 - Offers` | Offer comparison, negotiation notes, risk analysis | New application materials |
+| `99 - Not Interested` / `100 - Rejected` | Status note only | Any new artifacts |
 
-A cron job, scheduled agent, or workflow runner can:
+Simple global rule:
+
+```text
+Every job gets tracking.
+Promising jobs get packets.
+Apply-stage jobs get resume/CV + cover letter.
+Interview-stage jobs get interview prep.
+Closed jobs get no new artifacts.
+```
+
+Use `resume` or `CV` according to local market expectations. Do not force US terminology onto international roles.
+
+## Required scheduled discovery layer
+
+The workflow can be run manually for a single job, but the full Career Intelligence system requires a scheduled scan.
+
+A cron job, scheduled agent, or workflow runner must:
 
 1. scan approved job sources on a schedule,
-2. extract company, role, URL, location, compensation, and source,
+2. extract company, role, URL, country/region, location, work model, compensation, currency, and source,
 3. deduplicate against existing packets and tracker rows,
 4. add new candidates to the review queue,
 5. update a spreadsheet, database, or tracker with live status,
-6. notify only when a role needs attention.
+6. write a last-run timestamp and run summary,
+7. notify only when a role needs attention or the job failed.
 
 Automation should not apply to jobs by default. It should reduce discovery and tracking effort while preserving the decision workflow.
+
+Recommended frequency:
+
+| Schedule | Use when |
+|---|---|
+| Daily at 8 AM | Default for most users. |
+| Every 6 hours | Active search, fast-moving market, multiple countries/time zones. |
+| Twice weekly | Passive monitoring. |
+
+Tracking requirements:
+
+- A log must show the latest run summary.
+- The tracker must include `Last Checked` or equivalent.
+- New or updated roles must have packet/tracker consistency.
+- Failures must be visible; do not fail silently.
 
 Default scheduled-scan behavior:
 

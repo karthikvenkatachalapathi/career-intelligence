@@ -1,30 +1,42 @@
 # Guided setup
 
-This repo is intentionally inert when cloned.
+This setup is written for a non-technical user who wants a repeatable career-intelligence system for **any job, in any country, on any job board**.
 
-Cloning it does **not**:
+The workflow has three required parts:
 
-- install an AI agent,
-- configure a cron job,
-- authenticate LinkedIn,
-- create a spreadsheet or database,
-- write to your private career workspace,
-- apply to jobs.
+1. an AI agent that follows the Career Intelligence instructions,
+2. a private workspace where job packets and artifacts are stored,
+3. a scheduled discovery job that runs automatically and keeps a tracker current.
 
-That keeps the public repo safe and portable. The repo gives you the workflow; you decide which agent, tracker, and automation pieces to connect.
+Cloning this repo does **not** magically install those pieces for you. The repo gives you the instructions and examples; your agent/runtime connects them.
+
+## Plain-English mental model
+
+```text
+Scheduled discovery runs every day
+  -> finds jobs from your approved sources
+  -> removes duplicates
+  -> creates/updates a job packet
+  -> updates your tracker
+  -> tells you what needs a decision
+
+You review promising roles
+  -> weak roles stay research-only or are marked pass
+  -> strong roles get application artifacts
+  -> interview-stage roles get prep artifacts
+```
 
 ## Setup path
-
-You can stop after Step 2 if you only want the manual workflow.
 
 | Step | Required? | What it enables |
 |---|---:|---|
 | 1. Clone the repo | Yes | Local copy of the workflow. |
-| 2. Add the workflow to your AI agent | Yes | Manual scan/evaluate/apply/prep/status workflow. |
-| 3. Create a private workspace | Recommended | Durable opportunity packets. |
-| 4. Add a tracker | Optional | Spreadsheet/database dashboard. |
-| 5. Add LinkedIn MCP | Optional | LinkedIn as a first-class source. |
-| 6. Add scheduled discovery | Optional | Automatic discovery + tracker updates. |
+| 2. Add the workflow to your AI agent | Yes | Manual evaluation and artifact generation. |
+| 3. Create a private workspace | Yes | Durable job packets and artifact storage. |
+| 4. Create a tracker | Yes | Simple dashboard for all jobs. |
+| 5. Configure discovery sources | Yes | Any-country, any-job-board inputs. |
+| 6. Add scheduled discovery | Yes | Automatic scans and tracker updates. |
+| 7. Add LinkedIn or other authenticated sources | Optional | Better coverage where supported. |
 
 ## 1. Clone the repo
 
@@ -73,40 +85,194 @@ Career Intelligence/
   DOCX Versions/
 ```
 
-When a role is worth tracking, the **agent should create the opportunity packet** using:
+When a role is worth tracking, the **agent creates the opportunity packet** using:
 
 ```text
 templates/opportunity-packet-template.md
 ```
 
-The user should not manually create every packet file. Normal flow:
+You should not manually create every packet file. Normal flow:
 
 ```text
-user or automation finds a role
+scheduled discovery or user finds a role
   -> agent evaluates it
   -> agent creates <Company> - <Role>/START HERE.md
-  -> agent creates only the additional artifacts required by the mode
+  -> agent creates only the additional artifacts required by the stage
+  -> tracker is updated
   -> user reviews/corrects evidence
 ```
 
-## 4. Add a tracker
+## 4. Create a tracker
 
-A tracker is optional. It can be a spreadsheet, Airtable, Notion database, SQLite database, or project board.
+A tracker is required because scheduled discovery needs a simple place to record what it found.
 
-Recommended columns:
+Use whatever you already understand:
+
+- Google Sheets,
+- Excel,
+- Airtable,
+- Notion database,
+- SQLite,
+- a Markdown table,
+- a project board.
+
+Minimum columns:
 
 ```text
-Company | Role | Status | Fit Score | Source URL | Company Careers URL | LinkedIn URL | Next Action | Last Updated
+Company | Role | Status | Fit Score | Country/Region | Location | Remote/Hybrid/Onsite | Source URL | Company Careers URL | Date Found | Last Checked | Next Action | Artifact Status
+```
+
+Recommended status values:
+
+```text
+Not Reviewed | Interested | Applied | Interview | Offer | On Hold | Not Interested | Rejected
 ```
 
 Rule of thumb:
 
 - Packet = source of truth.
-- Tracker = dashboard.
+- Tracker = easy dashboard.
+- Scheduled discovery updates both.
 
-## 5. Add LinkedIn MCP as a first-class source
+## 5. Configure discovery sources
 
-LinkedIn is optional. If you run a LinkedIn MCP server separately, treat it as a source channel in the `scan` pipeline.
+Scheduled discovery can work anywhere in the world if you define sources clearly.
+
+Start with a small list. Add more later.
+
+```text
+sources:
+  - LinkedIn job search URL for your target role/location
+  - direct company careers page
+  - Greenhouse / Lever / Workday / Ashby / SmartRecruiters board
+  - local country-specific job board
+  - remote-work board
+  - recruiter newsletter or RSS feed
+```
+
+For global use, always capture:
+
+```text
+Country/Region | City | Time zone if relevant | Work model | Visa/sponsorship note if visible | Salary currency if posted
+```
+
+The workflow should not assume US-only job boards, US-only resumes, or one naming convention for CV/resume documents.
+
+## 6. Add scheduled discovery
+
+Scheduled discovery is **required** for this workflow. Without it, you still have useful prompts, but you do not have the full Career Intelligence system.
+
+### Recommended frequency
+
+Start here:
+
+| Schedule | Use when |
+|---|---|
+| Every 6 hours | Active search, fast-moving market, multiple countries/time zones. |
+| Daily at 8 AM | Normal default for most users. |
+| Twice weekly | Passive monitoring. |
+
+Recommended default:
+
+```cron
+0 8 * * *
+```
+
+That means: run every day at 8:00 AM.
+
+For active searches:
+
+```cron
+0 */6 * * *
+```
+
+That means: run every 6 hours.
+
+### What the scheduled job must do
+
+```text
+scheduled discovery job
+  -> scan configured sources
+  -> extract company, role, country, location, work model, compensation, URL, and source
+  -> dedupe against existing packets and tracker rows
+  -> create or update a packet in 01 - Not Reviewed
+  -> update the tracker
+  -> record when it ran
+  -> report only new high-signal roles, blockers, or failures
+```
+
+Do **not** auto-apply by default.
+
+### Dumb-friendly cron example
+
+Create a script named `run-career-discovery.sh` in your private workspace:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$HOME/Career Intelligence"
+
+# Replace this with your actual agent command.
+# Examples: hermes run, claude, codex, cursor agent, python script, etc.
+your-agent-command "Use the Career Intelligence workflow in scan mode. Scan my configured sources, update my tracker, create or update packets, and report only new high-signal roles or failures."
+```
+
+Make it executable:
+
+```bash
+chmod +x "$HOME/Career Intelligence/run-career-discovery.sh"
+```
+
+Open cron:
+
+```bash
+crontab -e
+```
+
+Add one line:
+
+```cron
+0 8 * * * "$HOME/Career Intelligence/run-career-discovery.sh" >> "$HOME/Career Intelligence/discovery.log" 2>&1
+```
+
+### How to track whether cron is running
+
+Use three simple checks.
+
+#### 1. Check the log
+
+```bash
+tail -50 "$HOME/Career Intelligence/discovery.log"
+```
+
+You should see the latest run summary, new roles, updates, or an error.
+
+#### 2. Check the tracker
+
+Look at these columns:
+
+```text
+Date Found | Last Checked | Next Action | Artifact Status
+```
+
+If `Last Checked` is not changing after the scheduled time, cron is probably not running.
+
+#### 3. Check the packet folders
+
+The scheduled job should create or update folders under:
+
+```text
+Career Intelligence/01 - Not Reviewed/
+```
+
+If the tracker says a role exists but no packet exists, the job is incomplete.
+
+## 7. Add LinkedIn or other authenticated sources
+
+LinkedIn is optional as a source, but discovery itself is not optional.
+
+If you run a LinkedIn MCP server separately, treat it as one source channel in the `scan` pipeline.
 
 Example MCP server config:
 
@@ -127,55 +293,52 @@ Example MCP server config:
 }
 ```
 
-What happens after configuration depends on your agent runtime and the MCP server behavior.
-
 Expect a separate authentication step the first time the LinkedIn server needs an authenticated session. That may involve browser login, cookies, or whatever flow the MCP server supports. This repo does not start that login automatically.
 
-Use LinkedIn MCP to capture:
+## When artifacts are created
 
-- LinkedIn job URL,
-- company,
-- role title,
-- location / work model,
-- posted date if available,
-- recruiter or poster context when available,
-- verified direct company careers link when possible.
+The workflow creates artifacts only when they are useful for the current stage.
 
-Then route the role into `evaluate` mode.
+| Stage / status | Create these artifacts | Do not create yet |
+|---|---|---|
+| Not Reviewed | `START HERE.md`, source posting, basic fit notes | Resume, cover letter, interview prep |
+| Interested | Fit analysis, employer intelligence, role intelligence, gap analysis, application strategy | Final resume/CV unless applying soon |
+| Applying / Applied | Job-specific resume or CV, cover letter, ATS keyword analysis, tailoring change log | Interview prep unless an interview is scheduled |
+| Referral / recruiter screen | Referrer blurb, recruiter message, 60-second pitch, proof points | Full interview packet unless needed |
+| Interview | Interview prep packet, story bank, questions to ask, red flags to qualify | New resume rewrite unless the JD changed |
+| Offer | Offer comparison, negotiation notes, risk analysis | New application materials |
+| Not Interested / Rejected | Status note only | Any new artifacts |
 
-## 6. Add scheduled discovery
-
-Scheduled discovery is optional. It is not created automatically by this repo.
-
-Use your scheduler of choice: cron, GitHub Actions, a local agent scheduler, Hermes cron, Airflow, a small script, or another workflow runner.
-
-Recommended behavior:
+Simple rule:
 
 ```text
-scheduled job
-  -> scan approved sources, including LinkedIn MCP if configured
-  -> extract company, role, URL, location, compensation, and source
-  -> dedupe against existing packets and tracker rows
-  -> create a packet in 01 - Not Reviewed only when worth tracking
-  -> update the live tracker
-  -> notify only for high-signal roles or required user decisions
+Every job gets tracking.
+Promising jobs get packets.
+Apply-stage jobs get resume/CV + cover letter.
+Interview-stage jobs get interview prep.
+Closed jobs get no new artifacts.
 ```
 
-Do **not** auto-apply by default.
+For international jobs:
 
-The scheduled job should reduce discovery and tracking work. It should not make career decisions without review.
+- Use `resume` when that is expected by the market.
+- Use `CV` when that is expected by the market.
+- Preserve local conventions unless the user asks otherwise.
+- Track salary currency, country, location, visa/sponsorship requirements, and work model.
 
 ## Setup checklist
 
 - [ ] Repo cloned.
 - [ ] `skills/career-intelligence/SKILL.md` added to your agent.
 - [ ] Private `Career Intelligence/` workspace created.
-- [ ] Test `evaluate` prompt works on one job URL.
-- [ ] Tracker created, if desired.
-- [ ] LinkedIn MCP configured, if desired.
-- [ ] LinkedIn authentication completed, if required by your MCP server.
-- [ ] Scheduled discovery configured, if desired.
-- [ ] Scheduled job tested with a dry run before enabling writes.
+- [ ] Tracker created.
+- [ ] Discovery sources listed.
+- [ ] Scheduled discovery configured.
+- [ ] Scheduled discovery tested with a dry run before enabling writes.
+- [ ] `discovery.log` created and readable.
+- [ ] Tracker `Last Checked` updates after a scheduled run.
+- [ ] Packets appear in `01 - Not Reviewed` when new roles are found.
+- [ ] LinkedIn or other authenticated sources configured if desired.
 
 ## Suggested first run
 
@@ -196,4 +359,4 @@ Expected result:
 - If worth tracking, it creates or proposes a packet.
 - It writes `START HERE.md` first.
 - It recommends the next action.
-- It does not generate a resume or cover letter unless the role clears the threshold and you ask for apply mode.
+- It does not generate a resume, CV, or cover letter unless the role clears the threshold and you ask for apply mode.
