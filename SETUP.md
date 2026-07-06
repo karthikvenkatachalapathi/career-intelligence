@@ -1,6 +1,6 @@
 # Guided setup
 
-This setup is written for someone who wants a repeatable career-intelligence system for **any job, in any country, on any job board**.
+This setup is written for anyone who wants a repeatable career-intelligence system for **any job, in any country, on any job board**.
 
 The workflow has three required parts:
 
@@ -8,7 +8,7 @@ The workflow has three required parts:
 2. a private workspace where job packets and artifacts are stored,
 3. a scheduled discovery job that runs automatically and keeps a tracker current.
 
-Cloning this repo does **not** automatically install those pieces for you. The repo gives you the instructions and examples; your agent/runtime connects them.
+Cloning this repo does **not** install or connect those pieces automatically. The repo gives you the instructions and examples; your agent/runtime connects them.
 
 ## Plain-English mental model
 
@@ -203,7 +203,7 @@ scheduled discovery job
 
 Do **not** auto-apply by default.
 
-### Dumb-friendly cron example
+### Cron example
 
 Create a script named `run-career-discovery.sh` in your private workspace:
 
