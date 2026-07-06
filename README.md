@@ -24,7 +24,11 @@ This repo also treats discovery and tracking as first-class workflow pieces: sch
 
 ## Start here
 
-Use one file:
+Cloning this repo does **not** automatically install cron jobs, authenticate LinkedIn, create trackers, or apply to jobs. It is a portable workflow package.
+
+For a step-by-step onboarding path, use [SETUP.md](SETUP.md).
+
+The one required workflow file is:
 
 ```text
 skills/career-intelligence/SKILL.md
@@ -141,7 +145,7 @@ The packet should remain the source of truth. The tracker is the dashboard.
 
 ## Optional: scheduled job discovery
 
-You can also run a scheduled job that finds relevant roles without manual effort.
+This is not set up automatically. See [SETUP.md](SETUP.md) for the guided path.
 
 Typical pipeline:
 
@@ -159,7 +163,7 @@ This should not auto-apply. It should only reduce discovery and tracking work.
 
 ## Optional: LinkedIn as a first-class source
 
-If you run a LinkedIn MCP server separately, treat LinkedIn as a native source in the scan pipeline, alongside company career pages and job boards.
+This is not authenticated automatically. If you run a LinkedIn MCP server separately, treat LinkedIn as a native source in the scan pipeline, alongside company career pages and job boards.
 
 Example MCP config:
 
@@ -196,6 +200,7 @@ Then feed the result into `evaluate` mode. LinkedIn discovery should create revi
 
 ```text
 README.md                                # Start here
+SETUP.md                                 # Guided setup walkthrough
 skills/career-intelligence/SKILL.md      # Canonical workflow instructions
 examples/prompts.md                      # Copy/paste prompts
 templates/opportunity-packet-template.md   # Agent-created packet starter template
