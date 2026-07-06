@@ -33,10 +33,10 @@ You review promising roles
 | 1. Clone the repo | Yes | Local copy of the workflow. |
 | 2. Add the workflow to your AI agent | Yes | Manual evaluation and artifact generation. |
 | 3. Create a private workspace | Yes | Durable job packets and artifact storage. |
-| 4. Create a tracker | Yes | Simple dashboard for all jobs. |
+| 4. Create a tracker | Recommended | Simple dashboard for all jobs. |
 | 5. Configure discovery sources | Yes | Any-country, any-job-board inputs. |
-| 6. Add scheduled discovery | Yes | Automatic scans and tracker updates. |
-| 7. Add LinkedIn or other authenticated sources | Optional | Better coverage where supported. |
+| 6. Add scheduled discovery | Recommended | Automatic scans and tracker updates. |
+| 7. Add LinkedIn or other authenticated sources | Recommended | Better coverage where supported. |
 
 ## 1. Clone the repo
 
