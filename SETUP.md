@@ -1,6 +1,6 @@
 # Guided setup
 
-This setup is written for a non-technical user who wants a repeatable career-intelligence system for **any job, in any country, on any job board**.
+This setup is written for someone who wants a repeatable career-intelligence system for **any job, in any country, on any job board**.
 
 The workflow has three required parts:
 
