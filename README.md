@@ -1,120 +1,83 @@
 # Career Intelligence Skill
 
-A reusable AI-agent skill for helping people navigate career decisions with structure, evidence, and judgment — especially in a difficult tech market shaped by layoffs, reorganizations, and slower hiring cycles.
+A platform-agnostic AI-agent workflow for helping people make better career decisions in a difficult tech market.
 
-This repository is intentionally **PII-free**. It contains a generalized version of a Career Intelligence workflow that anyone can adapt for their own background, target roles, constraints, and preferred tools.
+Use it with Claude, ChatGPT, Cursor, Codex, Hermes, OpenCode, local agents, or any system that supports reusable instructions. There is nothing platform-specific in the workflow: it is just structured operating guidance an agent can follow.
 
 ## Why this exists
 
-Many career tools optimize for volume:
+A lot of AI job-search tooling focuses on speed:
 
-- more job postings
-- more applications
-- more resume variants
-- more cover letters
+- find more roles
+- generate more resumes
+- write more cover letters
+- send more applications
 
-In a tough market, volume is not always the advantage. The bigger advantage is decision quality:
+That can help, but it is not always the highest-leverage problem.
 
-- Which opportunities are actually worth pursuing?
-- Is the role strategically aligned, or just keyword-adjacent?
+In a market shaped by layoffs, reorganizations, slower hiring cycles, and unclear role expectations, many people need better judgment before they need more output.
+
+The useful questions are often:
+
+- Is this opportunity actually worth pursuing?
+- Is the fit real, or just keyword overlap?
 - What evidence supports the candidate's fit?
-- What gaps or risks should be understood up front?
-- What should be clarified before investing more time?
-- When should tailored materials be created — and when should they be skipped?
+- What risks or gaps should be understood before investing time?
+- Should this become a referral conversation, interview prep, application work, or a pass?
+- How do you preserve the decision trail so you do not restart from zero every time?
 
-The Career Intelligence Skill turns career exploration into a repeatable AI-assisted workflow. It is designed to help someone think clearly, preserve context, and create high-quality artifacts only when justified.
+This skill turns career planning into a repeatable intelligence workflow instead of an application factory.
 
-## Inspiration and credit
+## Credit and inspiration
 
 This work was influenced by [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search), an open-source AI-powered job application framework built around Claude Code.
 
-That project demonstrates how AI can help evaluate jobs, tailor CVs, write cover letters, and prepare for interviews. This skill borrows the useful discipline of structured command modes and agent-assisted career workflows, while taking a different direction: a broader **career decision system** focused on evidence, fit, risk, and durable context rather than application volume.
+`ai-job-search` is strong at helping with the mechanics of applying: evaluating roles, tailoring CVs, writing cover letters, and preparing for interviews.
 
-## What makes this skill different
+This skill operates one layer earlier and one layer wider.
 
-### 1. Decision quality over application volume
+The distinction:
 
-The skill is not designed to apply everywhere. It is designed to decide what deserves attention.
+> `ai-job-search` helps with the mechanics of applying.  
+> Career Intelligence helps decide whether, why, and how to pursue an opportunity in the first place.
 
-It separates quick screening, deeper evaluation, application artifact creation, interview preparation, and status tracking into distinct modes.
+## What makes this different
 
-### 2. Evidence before optimization
+| Layer | Application-oriented workflow | Career Intelligence workflow |
+|---|---|---|
+| Primary focus | Applying well | Deciding what deserves effort |
+| Main question | “How do I apply?” | “Should I pursue this, and what is the right next step?” |
+| Default behavior | Produce application materials | Classify the decision first, then act only as needed |
+| Output | CV, cover letter, interview prep | Career packet: fit, evidence, employer context, risks, questions, referral strategy, status, and artifacts |
+| Time horizon | Application moment | Full opportunity lifecycle |
+| Differentiator | Execution speed | Judgment, gates, evidence, continuity |
 
-The skill explicitly prohibits inventing:
+## Core idea
 
-- experience
-- accomplishments
-- metrics
-- certifications
-- technologies
-- employers
-- dates
-- relationships
-- referrals
+Not every opportunity should become an application.
 
-If a claim is not supported by the candidate's source material, it should not appear in the output.
+Some deserve a quick screen.  
+Some deserve deeper evaluation.  
+Some deserve a referral qualification question.  
+Some deserve interview prep.  
+Some should be closed out quickly.
 
-### 3. Fit is based on trajectory, not keywords
-
-Keyword overlap is not the same as career fit. The workflow evaluates opportunities across dimensions such as:
-
-- seniority alignment
-- domain fit
-- leadership scope
-- technical relevance
-- compensation assumptions
-- work model
-- location constraints
-- long-term career direction
-
-### 4. Career packets preserve context
-
-The skill encourages each serious opportunity to become a structured packet containing fit analysis, employer intelligence, gap analysis, strategy, questions, referral language, and interview prep.
-
-That makes the process durable. A person should be able to return to an opportunity later without reconstructing the decision from scattered chats, notes, browser tabs, or recruiter messages.
-
-### 5. Referrals are treated thoughtfully
-
-The skill includes a dedicated referrer-talking-blurb artifact. The goal is to help a referrer explain a candidate's fit credibly and specifically, without overstating the relationship or fabricating inside knowledge.
-
-### 6. High-stakes artifacts get a reviewer pass
-
-For resumes, cover letters, and other high-stakes materials, the skill uses a drafter-reviewer pattern:
-
-1. Draft from verified evidence.
-2. Review for unsupported claims, weak positioning, missing evidence, and formatting drift.
-3. Revise only with grounded improvements.
-4. Verify the final artifact exists and is usable.
+The skill routes work into the narrowest useful mode before generating artifacts.
 
 ## Workflow modes
 
-| Mode | Use when | Expected behavior |
+| Mode | Use when | What the agent should do |
 |---|---|---|
-| `scan` | Looking for opportunities or themes | Find high-signal roles, dedupe, shortlist only credible matches. |
-| `evaluate` | Deciding whether a role is worth pursuing | Build fit analysis, employer intelligence, risks, and next-step recommendation. |
-| `apply` | The opportunity clears the bar | Generate tailored resume/cover/referral artifacts from verified evidence. |
-| `prep` | A recruiter screen, hiring-manager call, or interview is coming up | Produce interview prep, story bank, questions, and positioning guidance. |
-| `upskill` | Comparing target roles to current evidence | Identify gaps, learning priorities, and evidence-building opportunities. |
-| `status` | Checking where an opportunity stands | Look up status from the packet/tracker without regenerating artifacts. |
+| `scan` | Looking for roles or market themes | Find high-signal opportunities, dedupe, and shortlist only credible matches. |
+| `evaluate` | Deciding whether something is worth pursuing | Assess fit, evidence, risks, employer context, gaps, and next action. Do not create application materials by default. |
+| `apply` | The opportunity clears the bar | Create tailored application artifacts from verified evidence only. |
+| `prep` | A recruiter screen, referral conversation, hiring-manager call, or interview is coming up | Build pitch, story bank, questions, risks, and conversation guidance. |
+| `upskill` | Comparing target roles against current evidence | Identify skill gaps and evidence-building priorities. |
+| `status` | Checking where an opportunity stands | Report status and next action without regenerating artifacts. |
 
-## Suggested repository structure after installing
+## What a career packet can include
 
-You can adapt this to any note system, document system, or tracker. One common structure is:
-
-```text
-Career Intelligence/
-  01 - Not Reviewed/
-  02 - Interested/
-  03 - Applied/
-  04 - Interview/
-  05 - Offers/
-  06 - On Hold/
-  99 - Not Interested/
-  100 - Rejected/
-  DOCX Versions/
-```
-
-Each opportunity packet can contain:
+For serious opportunities, the skill can create or update a structured packet:
 
 ```text
 START HERE.md
@@ -132,127 +95,99 @@ START HERE.md
 11 - Interview Prep Packet.md
 ```
 
-## Installation
+Use any storage system you prefer: Markdown folders, Notion, Google Docs, a database, a spreadsheet, a project-management tool, or plain files.
 
-### Option A — Use with Hermes Agent skills
+The key is not the tool. The key is preserving the reasoning, evidence, and next action.
 
-Copy the skill folder into your Hermes profile skills directory:
+## How to use it with any AI agent
 
-```bash
-mkdir -p ~/.hermes/profiles/<profile-name>/skills/productivity/
-cp -R skills/career-intelligence ~/.hermes/profiles/<profile-name>/skills/productivity/career-intelligence
-```
+### Claude Projects / Claude Desktop / Claude Code
 
-Start a new Hermes session so the skill loader can pick it up.
-
-### Option B — Use as a prompt/workflow in another agent
-
-If your agent system does not support Hermes-style skills, copy the contents of:
+Add `career-intelligence-workflow.md` or `skills/career-intelligence/SKILL.md` to your project knowledge or skill folder. Tell Claude:
 
 ```text
-skills/career-intelligence/SKILL.md
+Use the Career Intelligence workflow. First classify the request as scan, evaluate, apply, prep, upskill, or status. Then follow that mode.
 ```
 
-into your agent's system prompt, project instructions, or reusable workflow library.
+### ChatGPT / custom GPTs
 
-## Configuration checklist
-
-Before using this skill, customize the placeholders in `skills/career-intelligence/SKILL.md`:
-
-- target role families
-- preferred industries
-- level/seniority targets
-- compensation constraints
-- work-model constraints
-- location constraints
-- source documents to trust
-- packet storage location
-- tracker fields
-- artifact naming conventions
-- apply/tailoring threshold
-
-## Recommended source materials
-
-The skill works best when the agent has access to a clean evidence base:
-
-- master resume
-- master cover letter
-- portfolio or personal website
-- project history
-- brag document
-- performance review excerpts
-- case studies
-- writing samples
-- certifications
-- target role examples
-
-Do not add private information to this public repository. Keep personal source documents in your private workspace.
-
-## Safety and privacy
-
-This repository should not contain:
-
-- names of private individuals
-- personal email addresses
-- phone numbers
-- home addresses
-- private compensation details
-- private recruiter or referrer names
-- private auth IDs or document IDs
-- credentials or access keys
-- local filesystem paths
-- unpublished employment history
-- private company documents
-
-Use placeholders such as:
+Paste the workflow into custom instructions or a project file. Use prompts such as:
 
 ```text
-<CANDIDATE_NAME>
-<TARGET_ROLE_FAMILY>
-<CAREER_PACKET_ROOT>
-<MASTER_RESUME_PATH>
-<TRACKER_URL>
-<COMPENSATION_FLOOR>
+Use the Career Intelligence workflow in evaluate mode for this role. Do not generate resume or cover-letter content unless the fit clears the threshold.
 ```
 
-## Example prompts
+### Cursor / Codex / OpenCode / other coding agents
+
+Keep the workflow file in the repository and reference it in your agent instructions:
+
+```text
+Follow career-intelligence-workflow.md for all career-opportunity analysis. Default to decision quality over application volume.
+```
+
+### Hermes or other skill-based agents
+
+Copy the `skills/career-intelligence/` folder into the agent's skill directory, or paste the workflow into the agent's reusable instruction system.
+
+## Quick-start prompts
 
 ### Evaluate a role
 
 ```text
-Use the Career Intelligence skill in evaluate mode for this job posting. Tell me whether it is worth pursuing, what evidence supports the fit, what risks exist, and what I should clarify before investing more time.
+Use the Career Intelligence workflow in evaluate mode for this job posting. Assess whether it is worth pursuing, what evidence supports the fit, what risks exist, and what should be clarified before investing more time.
 ```
 
 ### Prepare for a recruiter screen
 
 ```text
-Use the Career Intelligence skill in prep mode. Build a recruiter-screen prep packet with a 60-second pitch, must-ask questions, compensation/work-model clarification wording, and risks to qualify.
+Use the Career Intelligence workflow in prep mode. Build a recruiter-screen prep packet with a 60-second pitch, must-ask questions, compensation/work-model clarification wording, and risks to qualify.
 ```
 
 ### Create application artifacts
 
 ```text
-Use the Career Intelligence skill in apply mode. Generate tailored application artifacts only from verified source material. Include a change log and reviewer pass.
+Use the Career Intelligence workflow in apply mode. Tailor materials only from verified evidence. Include a change log and reviewer pass.
 ```
 
 ### Build a referral blurb
 
 ```text
-Use the Career Intelligence skill to create a referrer talking blurb for this role. Keep it factual, role-specific, and written in language a referrer could credibly use.
+Use the Career Intelligence workflow to create a referrer talking blurb for this role. Keep it factual, concise, role-specific, and written in language a referrer could credibly use.
 ```
 
-## Contributing
+## What to customize
 
-Contributions are welcome if they preserve the core principles:
+Before using it seriously, customize:
 
-- evidence before optimization
-- no fabricated candidate claims
-- decision quality over volume
-- explicit uncertainty labeling
-- reusable packet structure
-- privacy by default
+1. **Target lanes** — role families, functions, industries, or stages that matter.
+2. **Hard filters** — compensation, work model, location, travel, level, company stage, or other non-negotiables.
+3. **Evidence base** — resume, project history, portfolio, writing samples, performance notes, or case studies.
+4. **Decision thresholds** — what score or conditions justify deeper research, referral effort, tailored materials, or interview prep.
+5. **Packet structure** — where the agent should save analysis, status, questions, and artifacts.
 
-Please avoid adding real candidate data, real recruiter messages, private documents, or company-confidential material.
+## Design principles
+
+- Evidence before optimization.
+- Decision quality over application volume.
+- Career trajectory over keyword matching.
+- Generate only the artifacts that are actually needed.
+- Label uncertainty clearly.
+- Do not invent accomplishments, metrics, relationships, technologies, dates, or credentials.
+- Preserve context so the process can continue over time.
+
+## Repository contents
+
+```text
+README.md
+career-intelligence-workflow.md
+skills/career-intelligence/SKILL.md
+examples/prompts.md
+templates/career-packet-template.md
+CONTRIBUTING.md
+LICENSE
+```
+
+`career-intelligence-workflow.md` and `skills/career-intelligence/SKILL.md` contain the same core workflow. The duplicate path exists so different agent platforms can consume whichever shape is easiest.
 
 ## License
 

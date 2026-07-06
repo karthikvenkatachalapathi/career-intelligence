@@ -1,100 +1,64 @@
 ---
 name: career-intelligence
-description: Use when evaluating career opportunities, job postings, referrals, recruiter conversations, interview preparation, or application artifacts. Helps classify the task, assess evidence-based fit, preserve decision context, and create truthful career materials only when justified.
-version: 1.0.0
-author: Community
+description: Use when evaluating career opportunities, job postings, referrals, recruiter conversations, interviews, offers, rejections, or application artifacts. Classifies the request, assesses evidence-based fit, preserves decision context, and creates truthful career materials only when justified.
+version: 1.1.0
 license: MIT
-metadata:
-  hermes:
-    tags: [career, jobs, resume, cover-letter, referrals, interview-prep, decision-support]
-    related_skills: []
 ---
 
-# Career Intelligence Skill
+# Career Intelligence Workflow
 
-## Overview
+## Purpose
 
-This skill helps an AI agent support career decisions with structure, evidence, and judgment.
+Use this workflow to help a person make better career decisions with an AI agent.
 
-It is designed for people navigating complex career choices, including layoffs, reorganizations, slow hiring markets, referrals, interviews, and role comparisons. The goal is not to maximize application volume. The goal is to help a candidate decide which opportunities deserve time and how to pursue them honestly and effectively.
+It is platform-agnostic. It can run inside Claude, ChatGPT, Cursor, Codex, Hermes, OpenCode, a local agent, or any other system that can follow reusable instructions.
 
-This skill can be adapted for any candidate. Replace the placeholders in this file with the candidate's real constraints, source materials, and career goals in a private workspace. Do not commit personal data to a public repository.
+The goal is not to maximize job applications. The goal is to improve decision quality:
 
-## Core principles
+- Should this opportunity be pursued?
+- Is the fit real or just keyword overlap?
+- What evidence supports the candidate's fit?
+- What risks or gaps should be clarified?
+- What is the right next action?
+- Which artifacts are actually needed?
 
-1. **Evidence before optimization**
-   - Never invent experience, accomplishments, metrics, certifications, technologies, employers, dates, responsibilities, relationships, or referrals.
-   - If a claim is unsupported, label it as missing, inferred, or unverified.
-   - Strong positioning should come from better evidence selection, not fabrication.
+## Core rules
 
-2. **Decision quality over application volume**
-   - Do not treat every job posting as an application task.
-   - Classify the request into the narrowest workflow mode that satisfies it.
-   - Escalate to full application artifacts only when the role clears the configured threshold or the user explicitly asks.
+1. **Classify before acting.**
+   - Pick the narrowest workflow mode that satisfies the request.
+   - Do not turn every request into resume or cover-letter generation.
 
-3. **Career trajectory matters more than keyword overlap**
-   - A role can match keywords while being a poor strategic fit.
-   - Evaluate level, scope, work model, compensation, domain, growth, and long-term direction.
+2. **Use evidence before optimization.**
+   - Use only verified candidate evidence.
+   - Do not invent experience, accomplishments, metrics, certifications, technologies, employers, dates, responsibilities, relationships, or referrals.
+   - If evidence is missing, say so.
 
-4. **Context should be durable**
-   - Serious opportunities should become structured packets.
-   - Preserve source links, decision rationale, risks, questions, status, and artifacts so the candidate can resume later without starting over.
+3. **Treat fit as trajectory, not keywords.**
+   - Evaluate level, scope, domain, compensation, location, work model, growth, and long-term direction.
+   - Do not assume keyword overlap means strategic fit.
 
-5. **Privacy by default**
-   - Keep personal source documents private.
-   - Use placeholders in public examples.
-   - Do not expose recruiter names, referrer names, email addresses, private document IDs, local paths, or compensation details unless the user explicitly wants them in a private artifact.
+4. **Preserve decision context.**
+   - For serious opportunities, create or update a durable packet.
+   - Capture source links, rationale, risks, status, questions, and next action.
 
-## Required private configuration
-
-Before using this skill, configure these values in the user's private workspace:
-
-```yaml
-candidate_profile:
-  name: <CANDIDATE_NAME>
-  target_role_families:
-    - <TARGET_ROLE_FAMILY_1>
-    - <TARGET_ROLE_FAMILY_2>
-  preferred_industries:
-    - <INDUSTRY_1>
-  preferred_level: <LEVEL_OR_SCOPE>
-  compensation_constraints: <PRIVATE_COMPENSATION_RULES>
-  work_model_constraints: <REMOTE_HYBRID_ONSITE_RULES>
-  location_constraints: <LOCATION_RULES>
-  travel_constraints: <TRAVEL_RULES>
-
-source_materials:
-  master_resume: <PRIVATE_MASTER_RESUME_PATH_OR_DOC>
-  master_cover_letter: <PRIVATE_MASTER_COVER_LETTER_PATH_OR_DOC>
-  portfolio: <OPTIONAL_PRIVATE_OR_PUBLIC_PORTFOLIO>
-  brag_document: <PRIVATE_BRAG_DOCUMENT>
-  project_history: <PRIVATE_PROJECT_HISTORY>
-
-storage:
-  career_packet_root: <PRIVATE_CAREER_PACKET_ROOT>
-  tracker: <OPTIONAL_TRACKER_URL_OR_PATH>
-  docx_versions_root: <OPTIONAL_DOCX_ROOT>
-
-thresholds:
-  evaluate_only_below: 7.0
-  tailor_materials_at_or_above: 7.0
-  apply_immediately_at_or_above: 9.0
-```
+5. **Generate artifacts only when justified.**
+   - Resume, cover-letter, referral, or interview artifacts should follow the mode and threshold.
+   - If a role is weak or unclear, recommend research, qualification, or pass instead of generating polished documents.
 
 ## Workflow modes
 
-Before acting, classify the request into one mode.
+Before doing anything else, classify the request into one mode.
 
 | Mode | Trigger examples | Expected behavior |
 |---|---|---|
-| `scan` | "Find roles", "scan job boards", "what should I look at?" | Search high-signal boards or company pages, dedupe, shortlist only credible matches. |
-| `evaluate` | A job link, job description, company page, or "is this worth it?" | Build or update fit analysis, role intelligence, employer context, risks, and next-step recommendation. Do not tailor materials unless threshold or user request justifies it. |
-| `apply` | "Create a packet", "tailor resume", "move forward", "apply" | Generate full application artifacts from verified evidence, including change log and reviewer pass. |
-| `prep` | Recruiter screen, hiring-manager call, panel, interview, referral call | Build interview prep, pitch, story bank, questions, red flags, and qualification wording. |
-| `upskill` | "What gaps do I have?", "how do I prepare for these roles?" | Compare target roles against verified evidence and produce a development plan. |
-| `status` | "Where does this stand?", "what is my status?" | Look up packet/tracker status only. Do not regenerate artifacts. |
+| `scan` | “Find roles,” “scan job boards,” “what should I look at?” | Search high-signal sources, dedupe, and shortlist only credible matches. |
+| `evaluate` | Job link, JD, company page, “is this worth it?” | Build or update fit analysis, role intelligence, employer context, risks, and next-step recommendation. Do not tailor materials by default. |
+| `apply` | “Create a packet,” “tailor resume,” “apply,” “move forward” | Generate application artifacts from verified evidence, including change log and reviewer pass. |
+| `prep` | Recruiter screen, hiring-manager call, referral call, interview | Build pitch, story bank, questions, qualification wording, red flags, and do-not-overclaim boundaries. |
+| `upskill` | “What gaps do I have?” “How should I prepare for these roles?” | Compare target roles against evidence and produce a development plan. |
+| `status` | “Where does this stand?” “What is the status?” | Report status and next action only. Do not regenerate artifacts. |
 
-Default to the narrowest mode. Do not escalate a status or evaluate request into apply mode unless the user explicitly asks.
+Default to the narrowest useful mode. Escalate only when the user asks or when the saved opportunity status requires it.
 
 ## Inputs
 
@@ -103,20 +67,55 @@ Possible inputs:
 - job posting URL
 - job description text
 - company career page
-- LinkedIn or public job listing
+- public job listing
 - recruiter message
 - referrer context
 - role family without a formal job description
-- resume or cover letter source documents
-- portfolio or project materials
+- resume or cover-letter source material
+- portfolio or project history
 - interview stage and interviewer context
-- compensation or work-model constraints
+- compensation, location, or work-model constraints
+- existing packet or tracker status
 
-If the user does not have a formal job description yet, switch to referral or qualification-first mode. Use verified company context and label inferred role expectations clearly.
+If no formal job description exists, switch to qualification-first mode. Use verified company context and label all inferred role expectations clearly.
+
+## Suggested private configuration
+
+Adapt this in the user's private workspace:
+
+```yaml
+candidate_profile:
+  target_role_families:
+    - <TARGET_ROLE_FAMILY_1>
+    - <TARGET_ROLE_FAMILY_2>
+  preferred_industries:
+    - <INDUSTRY_1>
+  preferred_level: <LEVEL_OR_SCOPE>
+  compensation_constraints: <COMPENSATION_RULES>
+  work_model_constraints: <REMOTE_HYBRID_ONSITE_RULES>
+  location_constraints: <LOCATION_RULES>
+  travel_constraints: <TRAVEL_RULES>
+
+source_materials:
+  master_resume: <MASTER_RESUME_PATH_OR_DOC>
+  master_cover_letter: <MASTER_COVER_LETTER_PATH_OR_DOC>
+  portfolio: <PORTFOLIO_OR_WEBSITE>
+  brag_document: <BRAG_DOCUMENT>
+  project_history: <PROJECT_HISTORY>
+
+storage:
+  career_packet_root: <CAREER_PACKET_ROOT>
+  tracker: <OPTIONAL_TRACKER_URL_OR_PATH>
+
+thresholds:
+  evaluate_only_below: 7.0
+  tailor_materials_at_or_above: 7.0
+  apply_immediately_at_or_above: 9.0
+```
 
 ## Packet structure
 
-For serious opportunities, create a packet under the configured private career packet root.
+Use any storage system: Markdown, Notion, Google Docs, a database, a spreadsheet, a project-management tool, or plain files.
 
 Suggested status buckets:
 
@@ -151,38 +150,19 @@ START HERE.md
 
 Do not create every artifact for every role. Generate only what the mode and threshold require.
 
-## Artifact standards
-
-Every artifact should be:
-
-- evidence-based
-- concise but decision-useful
-- explicit about uncertainty
-- free of fabricated claims
-- structured for fast rereading
-- linked to source material when possible
-
-Include source links when available:
-
-- original job posting link
-- direct company careers page link
-- supporting company source links
-- date captured
-- confidence notes
-
 ## Phase 0 — Source collection
 
 1. Capture the job posting or source text if accessible.
 2. Capture the original URL and direct company careers URL if available.
-3. Gather candidate evidence from approved private source materials.
+3. Gather candidate evidence from approved source materials.
 4. Separate facts, inferences, and missing evidence.
 5. Normalize company name and role title.
-6. Choose the correct workflow mode.
-7. Create or update the packet only when the task requires durable storage.
+6. Choose the workflow mode.
+7. Create or update a packet only when durable storage is useful.
 
 ## Phase 1 — Employer intelligence
 
-Create `02 - Employer Intelligence.md` when the mode requires company research.
+Create employer intelligence when company context affects the decision.
 
 Include:
 
@@ -192,13 +172,13 @@ Include:
 - market position
 - size and headquarters when public
 - public/private status
-- leadership and likely org ownership when relevant
+- likely org ownership when relevant
 - strategic initiatives
 - recent news
 - why each item matters for this candidate
 - interview talking points
 
-If public employee sentiment is useful, create `02A - Employee Sentiment.md` with:
+If public employee sentiment is useful, summarize:
 
 - sources reviewed
 - evidence quality and access limits
@@ -210,7 +190,7 @@ If public employee sentiment is useful, create `02A - Employee Sentiment.md` wit
 
 ## Phase 2 — Role intelligence
 
-Create `03 - Role Intelligence.md` when evaluating a role.
+Create role intelligence when evaluating a role.
 
 Include:
 
@@ -231,8 +211,6 @@ Include:
 If no formal JD exists, title the section `Probable Role Shape` and label inferred expectations clearly.
 
 ## Phase 3 — Fit analysis
-
-Create `01 - Job Fit Analysis.md`.
 
 Score configured dimensions from 0–10. Example dimensions:
 
@@ -267,11 +245,9 @@ Suggested thresholds:
 | 5.0–6.9 | Borderline | Clarify risks before investing deeply. |
 | Below 5.0 | Weak fit | Usually do not pursue. Explain why. |
 
-Apply hard penalties for user-defined non-negotiables, such as relocation requirements, level mismatch, unacceptable travel, below-threshold compensation, or domain divergence.
+Apply hard penalties for configured non-negotiables such as relocation requirements, level mismatch, unacceptable travel, below-threshold compensation, or domain divergence.
 
 ## Phase 4 — Gap analysis and development plan
-
-Create `04 - Gap Analysis and Development Plan.md` when useful.
 
 For each major requirement, include:
 
@@ -294,7 +270,7 @@ Then provide:
 
 ## Phase 5 — ATS keyword analysis
 
-Create `05 - ATS Keyword Analysis.md` when the user may apply.
+Use this when the user may apply.
 
 Include:
 
@@ -318,24 +294,24 @@ Generate tailored materials only when:
 Rules:
 
 - Use the candidate's approved source resume and cover letter as the foundation.
-- Preserve the candidate's voice.
+- Preserve the candidate's voice unless the user asks for a rewrite.
 - Change emphasis, ordering, summary language, and selected evidence.
 - Do not invent facts.
 - Do not redesign unless asked.
-- Keep a change log in `06A - Tailoring Change Log.md`.
+- Keep a change log.
 - Verify final outputs exist and are readable.
 
-Recommended drafter-reviewer loop:
+Drafter-reviewer loop:
 
 1. Draft role-specific material from verified sources.
 2. Review against the JD, fit analysis, ATS analysis, and candidate evidence.
 3. Flag unsupported claims, weak alignment, and formatting drift.
 4. Revise only with grounded changes.
-5. Verify rendered artifacts.
+5. Verify the final artifact.
 
 ## Phase 7 — Referral and recruiter artifacts
 
-Create `09 - Referral Screen Messages and ATS Resume.md` when referral, recruiter, or application-form support is needed.
+Create referral/recruiter artifacts when referral, recruiter, or application-form support is needed.
 
 Include some or all of:
 
@@ -361,9 +337,7 @@ Never imply that the referrer has worked with the candidate, directly observed p
 
 ## Phase 8 — Application strategy
 
-Create `08 - Application Strategy.md` for serious opportunities.
-
-Include:
+For serious opportunities, include:
 
 - fit score
 - recommendation
@@ -379,9 +353,7 @@ For qualification-first opportunities, emphasize what must be learned before app
 
 ## Phase 9 — Questions to ask employer
 
-Create `10 - Questions to Ask Employer.md` for recruiter screens, hiring-manager calls, interviews, or diligence.
-
-Include:
+For recruiter screens, hiring-manager calls, interviews, or diligence, include:
 
 - top 12 must-ask questions
 - recruiter questions
@@ -399,9 +371,7 @@ Questions should be specific to the role and company, not generic interview fill
 
 ## Phase 10 — Interview prep
 
-Create `11 - Interview Prep Packet.md` when the user has an interview or screen.
-
-Include:
+When the user has an interview or screen, include:
 
 - 60-second pitch
 - role-specific positioning
@@ -422,7 +392,7 @@ If interviewer names are available, include only information that changes positi
 For status requests:
 
 1. Look up the packet or tracker.
-2. Report status, next action, and any blockers.
+2. Report status, next action, and blockers.
 3. Do not regenerate fit analysis, resume, cover letter, or prep artifacts.
 4. Keep the response short.
 
@@ -431,7 +401,7 @@ For status requests:
 When the user says a role was rejected or should be closed:
 
 1. Move or mark the packet in the correct status bucket.
-2. Update `START HERE.md` with the current status and date.
+2. Update the current status and date.
 3. Preserve historical notes.
 4. Do not regenerate application artifacts.
 5. Keep the response short.
@@ -441,7 +411,6 @@ When the user says a role was rejected or should be closed:
 Before reporting completion, verify:
 
 - [ ] Correct workflow mode was selected.
-- [ ] No private data was written to public files.
 - [ ] Original source link was captured when available.
 - [ ] Direct company careers link was captured when available.
 - [ ] Claims are supported by candidate evidence.
@@ -450,7 +419,7 @@ Before reporting completion, verify:
 - [ ] Fit score and recommendation are explained.
 - [ ] Resume/cover materials were generated only when justified.
 - [ ] High-stakes artifacts received a reviewer pass.
-- [ ] Final files exist and are readable.
+- [ ] Final files exist and are readable when files were requested.
 - [ ] Tracker or packet status is consistent.
 - [ ] Next action is clear.
 
@@ -472,7 +441,4 @@ Before reporting completion, verify:
    - Fix: make the blurb role-specific and credible for the referrer.
 
 6. **Losing context across conversations**
-   - Fix: preserve decision rationale in a packet.
-
-7. **Publishing private examples**
-   - Fix: keep public repos placeholder-only and store personal source material privately.
+   - Fix: preserve decision rationale in a packet or tracker.

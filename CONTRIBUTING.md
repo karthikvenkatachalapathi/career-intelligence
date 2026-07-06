@@ -1,15 +1,15 @@
 # Contributing
 
-Thank you for helping improve the Career Intelligence Skill.
+Thank you for helping improve the Career Intelligence workflow.
 
 ## Contribution principles
 
 Please preserve these principles:
 
+- Platform-agnostic instructions
 - Evidence before optimization
 - No fabricated candidate claims
 - Decision quality over application volume
-- Privacy by default
 - Explicit uncertainty labeling
 - Reusable packet structure
 - Clear mode selection before action
@@ -18,13 +18,11 @@ Please preserve these principles:
 
 Before opening a pull request:
 
-- [ ] No real candidate PII is included.
-- [ ] No credentials, access keys, private auth IDs, or private document IDs are included.
-- [ ] Examples use placeholders.
+- [ ] The workflow still works outside any single agent platform.
+- [ ] Examples use placeholders instead of one person's exact career details.
 - [ ] New guidance does not encourage fabricated claims.
 - [ ] New artifacts are useful across candidates, not tailored to one private profile.
 - [ ] README and SKILL.md stay aligned.
-- [ ] Privacy scan commands in `PRIVACY.md` pass or findings are explained.
 
 ## What belongs here
 
@@ -32,17 +30,15 @@ Good contributions:
 
 - better mode definitions
 - improved fit-scoring criteria
-- stronger privacy guidance
 - generic templates
 - better interview-prep structure
 - reusable recruiter/referral artifact patterns
 - validation checklists
+- examples for different agent platforms
 
 Avoid contributing:
 
-- real resumes
-- real cover letters
-- private recruiter messages
-- private compensation data
-- employer-confidential material
+- one platform's setup as the only supported path
 - one person's exact career strategy as default behavior
+- private resumes, cover letters, or recruiter messages
+- employer-confidential material
