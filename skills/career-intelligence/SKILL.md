@@ -1,7 +1,7 @@
 ---
 name: career-intelligence
 description: Use when evaluating career opportunities, job postings, referrals, recruiter conversations, interviews, offers, rejections, or application artifacts. Classifies the request, assesses evidence-based fit, preserves decision context, and creates truthful career materials only when justified.
-version: 1.1.0
+version: 1.2.0
 license: MIT
 ---
 
@@ -111,6 +111,9 @@ automation:
   scheduled_scan: <OPTIONAL_CRON_OR_SCHEDULED_AGENT>
   approved_sources:
     - <JOB_BOARD_OR_COMPANY_CAREERS_SOURCE>
+    - <COMPANY_CAREERS_PAGE>
+    - <LINKEDIN_MCP_OR_LINKEDIN_JOB_SEARCH>
+  linkedin_mcp: <OPTIONAL_LINKEDIN_MCP_SERVER_NAME>
   tracker_sync: <OPTIONAL_SPREADSHEET_OR_DATABASE_SYNC>
   default_new_status: "01 - Not Reviewed"
   alert_policy: <WHEN_TO_NOTIFY_THE_USER>
@@ -177,6 +180,8 @@ Default scheduled-scan behavior:
 
 - New roles go to `01 - Not Reviewed` or an equivalent review queue.
 - Existing roles are updated, not duplicated.
+- LinkedIn, company career pages, and job boards are treated as first-class source channels when configured.
+- LinkedIn MCP results should capture the LinkedIn job URL, company, role, location/work model, poster or recruiter context when available, and any verified direct company careers link.
 - The tracker mirrors packet status, source links, fit signals, and next action.
 - Alerts are reserved for new high-signal roles, blockers, or state changes.
 
