@@ -8,7 +8,7 @@ The workflow has three required parts:
 2. a private workspace where job packets and artifacts are stored,
 3. a scheduled discovery job that runs automatically and keeps a tracker current.
 
-Cloning this repo does **not** magically install those pieces for you. The repo gives you the instructions and examples; your agent/runtime connects them.
+Cloning this repo does **not** automatically install those pieces for you. The repo gives you the instructions and examples; your agent/runtime connects them.
 
 ## Plain-English mental model
 
