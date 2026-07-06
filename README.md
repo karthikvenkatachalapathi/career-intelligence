@@ -4,6 +4,24 @@ A simple, platform-agnostic workflow for using an AI agent to decide which caree
 
 It works with Claude, ChatGPT, Cursor, Codex, Hermes, OpenCode, or any agent that can read a Markdown instruction file.
 
+## Credit and relationship to `ai-job-search`
+
+This repo was inspired by [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search).
+
+The difference is the operating layer:
+
+| Project | Primary job | Best for |
+|---|---|---|
+| `ai-job-search` | Application execution | Tailoring CVs, writing cover letters, preparing for interviews, and moving through application mechanics. |
+| `career-intelligence` | Career decision intelligence | Deciding whether a role deserves effort, preserving fit rationale, tracking opportunities, qualifying referrals, and routing work into scan/evaluate/apply/prep/status modes. |
+
+Put simply:
+
+> `ai-job-search` helps you apply better once you know the role is worth pursuing.  
+> `career-intelligence` helps you decide what is worth pursuing, why, and what the next action should be.
+
+This repo also treats discovery and tracking as first-class workflow pieces: scheduled scans can find job links, LinkedIn MCP can be a native source, and a live tracker can mirror opportunity status.
+
 ## Start here
 
 Use one file:
@@ -85,7 +103,18 @@ Career Intelligence/
   DOCX Versions/
 ```
 
-For each serious opportunity, create a packet:
+When a serious opportunity is worth tracking, the **agent should create the packet** using `templates/opportunity-packet-template.md`.
+
+The user should not have to manually create every file. The normal flow is:
+
+```text
+user or scheduled scan finds a role
+  -> agent evaluates whether it is worth tracking
+  -> agent creates <Company> - <Role>/START HERE.md
+  -> agent adds only the extra files required by the mode
+```
+
+Example packet:
 
 ```text
 <Company> - <Role>/
@@ -93,14 +122,7 @@ For each serious opportunity, create a packet:
   00 - Source Job Posting.md
   01 - Job Fit Analysis.md
   02 - Employer Intelligence.md
-  03 - Role Intelligence.md
-  04 - Gap Analysis and Development Plan.md
-  05 - ATS Keyword Analysis.md
-  06A - Tailoring Change Log.md
-  08 - Application Strategy.md
-  09 - Referral Screen Messages and ATS Resume.md
-  10 - Questions to Ask Employer.md
-  11 - Interview Prep Packet.md
+  ...only if needed
 ```
 
 You do not need every file for every role. Generate only what the mode requires.
@@ -176,16 +198,10 @@ Then feed the result into `evaluate` mode. LinkedIn discovery should create revi
 README.md                                # Start here
 skills/career-intelligence/SKILL.md      # Canonical workflow instructions
 examples/prompts.md                      # Copy/paste prompts
-templates/career-packet-template.md      # Packet starter template
+templates/opportunity-packet-template.md   # Agent-created packet starter template
 CONTRIBUTING.md
 LICENSE
 ```
-
-## Credits
-
-Inspired by [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search).
-
-That project helps with the mechanics of applying. This workflow focuses on deciding whether, why, and how to pursue an opportunity in the first place.
 
 ## License
 

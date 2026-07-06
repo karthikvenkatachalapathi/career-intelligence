@@ -39,6 +39,7 @@ The goal is not to maximize job applications. The goal is to improve decision qu
 
 4. **Preserve decision context.**
    - For serious opportunities, create or update a durable packet.
+   - The agent should create the packet automatically when a role is worth tracking; the user should only provide or correct evidence.
    - Capture source links, rationale, risks, status, questions, and next action.
 
 5. **Generate artifacts only when justified.**
@@ -53,7 +54,7 @@ Before doing anything else, classify the request into one mode.
 |---|---|---|
 | `scan` | “Find roles,” “scan job boards,” “what should I look at?” | Search high-signal sources, dedupe, and shortlist only credible matches. |
 | `evaluate` | Job link, JD, company page, “is this worth it?” | Build or update fit analysis, role intelligence, employer context, risks, and next-step recommendation. Do not tailor materials by default. |
-| `apply` | “Create a packet,” “tailor resume,” “apply,” “move forward” | Generate application artifacts from verified evidence, including change log and reviewer pass. |
+| `apply` | “Create a packet,” “tailor resume,” “apply,” “move forward” | Create/update the opportunity packet and generate application artifacts from verified evidence, including change log and reviewer pass. |
 | `prep` | Recruiter screen, hiring-manager call, referral call, interview | Build pitch, story bank, questions, qualification wording, red flags, and do-not-overclaim boundaries. |
 | `upskill` | “What gaps do I have?” “How should I prepare for these roles?” | Compare target roles against evidence and produce a development plan. |
 | `status` | “Where does this stand?” “What is the status?” | Report status and next action only. Do not regenerate artifacts. |
